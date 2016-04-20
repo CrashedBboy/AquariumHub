@@ -12,29 +12,44 @@ var svr = net.createServer(function(sock){
 
     sock.on('data', function(data){
         var len = sockets.length;
+        var msg = data.toString().split(" ");
+        var action = msg[0];
+        var id = msg[1];
         console.log('connection: ' + len);
-        console.log(': ' + data);
-
+        console.log('action: ' + action + ' id: ' + id); 
         //MySQL
-        var con = mysql.createConnection({
-            host     : '',
-            user     : '',
-            password : '',
-            database : ''
-        });
-        con.connect(function(err){
-            if(err)
-                console.log('Error connection to DB');
-            console.log('Connection established');
-        });
-        con.query('SELECT * FROM Customer', function(err, rows){
-            if(err)
-                throw err;
-            console.log('Data received from DB: \n');
-            for(var i = 0; i < rows.length; i++)
-                console.log(rows[i].name);    
-        });
-        con.end(function(err){});
+        //詢問頻道
+        if(action == 'ASKTOPIC'){
+            //connection
+            var con = mysql.createConnection({
+                host     : '',
+                user     : '',
+                password : '',
+                database : ''
+            });
+            con.connect(function(err){
+                if(err)
+                    console.log('Error connection to DB');
+                console.log('Connection established');
+            });
+
+            //query id is leagal or illeagal
+            var queryString = 'SELECT * FROM Customer WHERE id = ' + id;
+            console.log('sql: ' + queryString);
+            con.query(queryString, [id], function(err, rows){
+                if(err)
+                    throw err;
+                //格式正確
+                if(rows.length > 0){
+                    for(var i in rows)
+                        sock.write('HELLO ' + rows[i].id + '\n');
+                }
+                //格式錯誤
+                else
+                    sock.write('INVALID \n');
+            });
+            con.end(function(err){});
+        }
     });
 });
 
