@@ -1,5 +1,10 @@
 extends layout
 
+block stylesheet
+	link(rel='stylesheet', href='/stylesheets/index.css')
+
 block content
-  h1= title
-  p Welcome to #{title}
+	div.ui.grid.divided.stackable.four.column.main
+		div#screen-grid.nine.wide.column
+			div#screen-box.ui.grey.stacked.segment Video
+		div#console-grid.seven.wide.column

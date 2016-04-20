@@ -1,7 +1,15 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+	head
+		title AquariumHub
+		link(rel='icon', type='image/png', href='/favicon.png')
+		script(type='text/javascript', src='https://code.jquery.com/jquery-2.2.3.js', integrity='sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=', crossorigin='anonymous')
+		script(type='text/javascript', src='/javascripts/semantic.min.js')
+		link(rel='stylesheet', href='/stylesheets/semantic.min.css')
+		link(rel='stylesheet', href='/stylesheets/layout.css')
+		block stylesheet
+		block javascript
+	body
+		div#nav.ui.top.menu.inverted.large
+			a.item.active.blue AquiarumHub
+		block content
