@@ -3,8 +3,27 @@ extends layout
 block stylesheet
 	link(rel='stylesheet', href='/stylesheets/index.css')
 
+block javascript
+	script(type='text/javascript', src='/javascripts/index.js')
+
 block content
 	div.ui.grid.divided.stackable.four.column.main
 		div#screen-grid.nine.wide.column
-			div#screen-box.ui.grey.stacked.segment Video
+			div#aquarium-title.ui.basic.segment
+				div.ui.huge.header 我的水族箱
+				i.tags.icon
+				a.aq-tag.ui.red.tag.label 水草
+				a.aq-tag.ui.teal.tag.label 斑馬魚
+				a.aq-tag.ui.blue.tag.label 初學者
+			div#screen-box.ui.grey.stacked.segment
+				video(width='100%', height='100%', autoplay, muted, loop)
+					source(src='http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm', type='video/webm')
+			div.ui.two.column.grid
+				div.eleven.wide.column
+					div.ui.form
+						div.inline.field
+							div.ui.toggle.checkbox
+								input(type='checkbox', tabindex='0', class='hidden')
+								label 立即觀看我的魚缸
+				div.five.wide.column.right.aligned 累積1205次觀看
 		div#console-grid.seven.wide.column
