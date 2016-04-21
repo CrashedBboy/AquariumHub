@@ -17,8 +17,8 @@ var svr = net.createServer(function(sock){
         var id = msg[1];
         console.log('connection: ' + len);
         console.log('action: ' + action + ' id: ' + id); 
-        //MySQL
-        //詢問頻道
+        
+        //ask empty topic
         if(action == 'ASKTOPIC'){
             //connection
             var con = mysql.createConnection({
@@ -33,29 +33,36 @@ var svr = net.createServer(function(sock){
                 console.log('Connection established');
             });
 
-            //query id is leagal or illeagal
             var sqlFindDevice = 'SELECT * FROM user_device WHERE device_id = ?';
             var sqlFindEmpty = 'SELECT * FROM user_ichannel WHERE user_id = ?';
             var sqlUpdateChannel = 'UPDATE user_ichannel SET user_id = ? WHERE channel_id = ?';
+            var sqlUpdateDevice = 'UPDATE user_device SET last_online = CURRENT_TIMESTAMP, online_status = TRUE WHERE user_id = ?';
+            
+            //query id is legal or illegal
             con.query(sqlFindDevice, [id], function(err, rows, fields){
                 if(err)
                     throw err;
-                //格式正確
                 if(rows.length > 0){
                     console.log('User is legal');
                     var user_id = rows[0].user_id;
+                    //find the empty channel
                     con.query(sqlFindEmpty, [-1], function(err, rows){
                         if(err)
                             throw err;
                         console.log('Channel is empty or not');
-                        //空頻道
                         if(rows.length > 0){
                             var channel_id = rows[0].channel_id;
                             sock.write('TOPIC ' + channel_id + '\n');
+                            //update the user id of the channel
                             con.query(sqlUpdateChannel, [user_id, channel_id], function(err, rows){
                                 if(err)
                                     throw err;
                                 console.log('Update channel');    
+                            });
+                            //update the online info of the device
+                            con.query(sqlUpdateDevice, [user_id], function(err, rows){
+                                if(err)
+                                    throw err;    
                             });
                         }
                         //BUSY
@@ -64,7 +71,6 @@ var svr = net.createServer(function(sock){
                         con.end(function(err){});
                     });
                 }
-                //格式錯誤
                 else
                     sock.write('INVALID \n');
             });
