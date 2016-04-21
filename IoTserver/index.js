@@ -2,8 +2,12 @@ var net = require('net');
 var mysql = require('mysql');
 
 var sockets = [];
-var svraddr = '140.115.152.224';
-var svrport = 8080;
+var severAddr = '140.115.152.224';
+var severPort = 8080;
+var supernodeAddr = '';
+var supernodePort = ;
+
+var flag = 0;
 
 var svr = net.createServer(function(sock){
     console.log('Connected: ' + sock.remoteAddress + ': ' + sock.remotePort);
@@ -29,8 +33,8 @@ var svr = net.createServer(function(sock){
             });
             con.connect(function(err){
                 if(err)
-                    console.log('Error connection to DB');
-                console.log('Connection established');
+                    console.log('Error connect to DB');
+                console.log('Server connection established');
             });
 
             var sqlFindDevice = 'SELECT * FROM user_device WHERE device_id = ?';
@@ -49,8 +53,21 @@ var svr = net.createServer(function(sock){
                     con.query(sqlFindChannel, user_id, function(err, rows){
                         if(err)
                             throw err;
-                        if(rows.length > 0)
-                            sock.write('TOPIC ' + rows[0].channel_id);
+                        if(rows.length > 0){
+                            var channel_id = rows[0].channel_id;
+                            //return to client
+                            sock.write('TOPIC ' + channel_id);
+                            //return to supernode
+                            var supernode = new net.Socket();
+                            supernode.connect(supernodePort, supernodeAddr, function(){
+                                supernode.write('NEW ' + user_id + ' ' + channel_id);
+                                supernode.destroy();
+                                console.log('SuperNode connect');
+                            });
+                            supernode.on('close', function(){
+                                console.log('Supernode connection close');    
+                            });
+                        }
                         else{
                             //find the empty channel
                             con.query(sqlFindChannel, [-1], function(err, rows){
@@ -59,7 +76,18 @@ var svr = net.createServer(function(sock){
                                 console.log('Channel is empty or not');
                                 if(rows.length > 0){
                                     var channel_id = rows[0].channel_id;
-                                    sock.write('TOPIC ' + channel_id + '\n');
+                                    //return to client
+                                    sock.write('TOPIC ' + channel_id);
+                                    //return to supernode
+                                    var supernode = new net.Socket();
+                                    supernode.connect(supernodePort, supernodeAddr, function(){
+                                        supernode.write('NEW ' + user_id + ' ' + channel_id);
+                                        supernode.destroy();
+                                        console.log('SuperNode connect');
+                                    });
+                                    supernode.on('close', function(){
+                                        console.log('Supernode connection close');    
+                                    });
                                     //update the user id of the channel
                                     con.query(sqlUpdateChannel, [user_id, channel_id], function(err, rows){
                                         if(err)
@@ -90,5 +118,6 @@ var svr = net.createServer(function(sock){
     });
 });
 
-svr.listen(svrport, svraddr);
-console.log('Server Creted at ' + svraddr + ': ' + svrport + '\n');
+svr.listen(severPort, severAddr);
+console.log('Server Creted at ' + severAddr + ': ' + severPort + '\n');
+
