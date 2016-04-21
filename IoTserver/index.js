@@ -23,9 +23,9 @@ var svr = net.createServer(function(sock){
             //connection
             var con = mysql.createConnection({
                 host     : '140.115.189.142',
-                user     : 'test',
-                password : 'test',
-                database : 'test'
+                user     : '',
+                password : '',
+                database : ''
             });
             con.connect(function(err){
                 if(err)
@@ -36,32 +36,37 @@ var svr = net.createServer(function(sock){
             //query id is leagal or illeagal
             var sqlFindDevice = 'SELECT * FROM user_device WHERE device_id = ?';
             var sqlFindEmpty = 'SELECT * FROM user_ichannel WHERE user_id = ?';
-            console.log('sqlFindUser: ' + sqlFindDevice);
-            console.log('sqlFindEmpty: ' + sqlFindEmpty);
-            con.query(sqlFindDevice, [id], function(err, rows){
+            var sqlUpdateChannel = 'UPDATE user_ichannel SET user_id = ? WHERE channel_id = ?';
+            con.query(sqlFindDevice, [id], function(err, rows, fields){
                 if(err)
                     throw err;
                 //格式正確
                 if(rows.length > 0){
                     console.log('User is legal');
+                    var user_id = rows[0].user_id;
                     con.query(sqlFindEmpty, [-1], function(err, rows){
                         if(err)
                             throw err;
                         console.log('Channel is empty or not');
                         //空頻道
                         if(rows.length > 0){
-                            sock.write('TOPIC ' + rows[1].channel_id + '\n');
-
-                        {
+                            var channel_id = rows[0].channel_id;
+                            sock.write('TOPIC ' + channel_id + '\n');
+                            con.query(sqlUpdateChannel, [user_id, channel_id], function(err, rows){
+                                if(err)
+                                    throw err;
+                                console.log('Update channel');    
+                            });
+                        }
                         //BUSY
                         else
                             sock.write('BUSY' + '\n');
+                        con.end(function(err){});
                     });
                 }
                 //格式錯誤
                 else
                     sock.write('INVALID \n');
-                con.end(function(err){});
             });
         }
         else
