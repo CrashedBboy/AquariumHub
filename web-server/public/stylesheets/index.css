@@ -5,10 +5,12 @@
 #screen-grid {
 	padding: 1% 3% 1% 3%;
 	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 #screen-box {
-	height: 70%;
+	width: 100%;
 }
 
 i.tags.icon {
@@ -18,4 +20,8 @@ i.tags.icon {
 a.ui.label.aq-tag {
 	top: -0.4em;
 	margin-left: 1.5em;
+}
+
+#console-grid {
+	padding: 1% 3% 1% 3%;
 }
