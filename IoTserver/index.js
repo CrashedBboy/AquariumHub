@@ -2,7 +2,7 @@ var net = require('net');
 var mysql = require('mysql');
 
 var sockets = [];
-var svraddr = '';
+var svraddr = '140.115.152.224';
 var svrport = 8080;
 
 var svr = net.createServer(function(sock){
@@ -22,10 +22,10 @@ var svr = net.createServer(function(sock){
         if(action == 'ASKTOPIC'){
             //connection
             var con = mysql.createConnection({
-                host     : '',
-                user     : '',
-                password : '',
-                database : ''
+                host     : '140.115.189.142',
+                user     : 'test',
+                password : 'test',
+                database : 'test'
             });
             con.connect(function(err){
                 if(err)
@@ -34,22 +34,38 @@ var svr = net.createServer(function(sock){
             });
 
             //query id is leagal or illeagal
-            var queryString = 'SELECT * FROM Customer WHERE id = ' + id;
-            console.log('sql: ' + queryString);
-            con.query(queryString, [id], function(err, rows){
+            var sqlFindDevice = 'SELECT * FROM user_device WHERE device_id = ?';
+            var sqlFindEmpty = 'SELECT * FROM user_ichannel WHERE user_id = ?';
+            console.log('sqlFindUser: ' + sqlFindDevice);
+            console.log('sqlFindEmpty: ' + sqlFindEmpty);
+            con.query(sqlFindDevice, [id], function(err, rows){
                 if(err)
                     throw err;
                 //格式正確
                 if(rows.length > 0){
-                    for(var i in rows)
-                        sock.write('HELLO ' + rows[i].id + '\n');
+                    console.log('User is legal');
+                    con.query(sqlFindEmpty, [-1], function(err, rows){
+                        if(err)
+                            throw err;
+                        console.log('Channel is empty or not');
+                        //空頻道
+                        if(rows.length > 0){
+                            sock.write('TOPIC ' + rows[1].channel_id + '\n');
+
+                        {
+                        //BUSY
+                        else
+                            sock.write('BUSY' + '\n');
+                    });
                 }
                 //格式錯誤
                 else
                     sock.write('INVALID \n');
+                con.end(function(err){});
             });
-            con.end(function(err){});
         }
+        else
+            sock.write('INVALID \n');
     });
 });
 
