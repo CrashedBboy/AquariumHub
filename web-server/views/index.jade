@@ -65,6 +65,31 @@ block content
 				| 照明控制
 			p
 				| 下方有三條控制項提供調整光的三原色的各自比例，讓魚缸和水生植物能夠在最佳的光色下生活，也讓它隨著您的心情隨時變換色調。
+			div.ui.form
+				div.inline.field
+					div.ui.toggle.checkbox
+						input(type='checkbox')
+						label 開關
+				div.field
+					label R
+					div.inline.fields
+						label.rgbLeft 0
+						input.red(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					label G
+					div.inline.fields
+						label.rgbLeft 0
+						input.green(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					label B
+					div.inline.fields
+						label.rgbLeft 0
+						input.blue(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					div.ui.basic.right.aligned.segment
+						button.ui.labeled.icon.black.button
+							i.idea.icon
+							| Submit
 			h4.ui.horizontal.divider.header
 				i.bar.food.icon
 				| 飼料投遞
