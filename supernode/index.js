@@ -9,13 +9,16 @@ var db = new Database(ENV.dbAddr, ENV.dbName, ENV.dbUser, ENV.dbPasswd);
 var ipcServer = new IPCServer(ENV.ipcAddr, ENV.ipcPort);
 
 /* Start all connections */
-var supernode = iot.connect();
-var dbConn = db.connect();
-var ipc = ipcServer.connect();
+iot.connect();
+db.connect();
+
+ipcServer.setIoTConn(iot);
+ipcServer.setDBConn(db)
+ipcServer.start();
 
 /* Retrieving all active user and their topics */
-for (each in db.getOnline()){
-	var user = new User(each);
+var originUser = db.getOnline();
+for (i = 0; i < originUser.length; i++){
+	var user = new User(originUser[i].name, originUser[i].topic);
 	iot.newUser(user);
 }
-
