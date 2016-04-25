@@ -20,5 +20,5 @@ ipcServer.start();
 var originUser = db.getOnline();
 for (i = 0; i < originUser.length; i++){
 	var user = new User(originUser[i].name, originUser[i].topic);
-	iot.newUser(user);
+	iot.addUser(user);
 }

@@ -5,3 +5,5 @@ function User(id, topic, stream = null) {
 	this.topic = topic;
 	this.stream = stream;
 }
+
+module.exports = User;
