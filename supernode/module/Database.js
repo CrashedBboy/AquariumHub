@@ -49,17 +49,25 @@ Database.prototype.getUserTopic = function(userID, callback) {
 	this.connection.query(query, callback);
 }
 
+Database.prototype.getTopicByID = function (topicID, callback) {
+	this.connection.query("SELECT topic FROM IoT_channels WHERE id=" + topicID, callback);
+}
+
 Database.prototype.getAvailableVChannel = function(callback) {
 	var query = "SELECT * FROM video_channels INNER JOIN user_vchannel ON video_channels.id=user_vchannel.channel_id WHERE user_vchannel.user_id=-1 LIMIT 1";
 	this.connection.query(query, callback);
 }
 
-Database.prototype.setVChannelUser = function(channelID, userID) {
+Database.prototype.setVChannelUser = function (channelID, userID) {
 	this.connection.query("UPDATE user_vchannel SET user_id=" + userID + " WHERE channel_id=" + channelID, updateCallback);
 }
 
-Database.prototype.setVChannelFree = function(channelID) {
+Database.prototype.setVChannelFree = function (channelID) {
 	this.connection.query("UPDATE user_vchannel SET user_id=-1 WHERE channel_id=" + channelID, updateCallback);
+}
+
+Database.prototype.getUserVChannel = function (userID, callback) {
+	this.connection.query("SELECT channel_id FROM user_vchannel WHERE user_id=" + userID, callback);
 }
 
 Database.prototype.close = function () {

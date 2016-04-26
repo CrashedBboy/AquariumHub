@@ -9,8 +9,8 @@ function IoT(brokerAddr) {
 
 IoT.prototype.connect = function() {
 	this.connection = mqtt.connect(this.brokerAddr);
-	this.connection.on('connect', this.connectInit);
-	this.connection.on('message', this.messageHandler);
+	this.connection.on('connect', this.connectInit.bind(this));
+	this.connection.on('message', this.messageHandler.bind(this));
 }
 
 IoT.prototype.connectInit = function() {
@@ -49,7 +49,8 @@ IoT.prototype.streamOff = function(userID) {
 }
 
 IoT.prototype.getUserTopic = function(userID) {
-	var result = this.users.filter(findViaUserID.bind(null, userID));
+	var id = parseInt(userID);
+	var result = this.users.filter(findViaUserID.bind(null, id));
 	if (result.length > 0) {
 		return result[0].topic;
 	} else {
@@ -58,7 +59,7 @@ IoT.prototype.getUserTopic = function(userID) {
 }
 
 function findViaUserID(ID, user, index, array) {
-	return user.id === ID;
+	return user.id == ID;
 }
 
 module.exports = IoT;
