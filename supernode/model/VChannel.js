@@ -1,8 +1,8 @@
-function VChannel(id, feedUrl, streamUrl, filename = null) {
+function VChannel(id, feedUrl, streamUrl) {
 	this.id = id;
 	this.feedUrl = feedUrl;
 	this.streamUrl = streamUrl;
-	this.filename = filename;
+	this.filename = null;
 }
 
 VChannel.prototype.getStreamUrl = function() {
@@ -19,6 +19,10 @@ VChannel.prototype.getID = function() {
 
 VChannel.prototype.getFileName = function() {
 	return this.filename;
+}
+
+VChannel.prototype.setFileName = function(filename) {
+	this.filename = filename;
 }
 
 module.exports = VChannel;
