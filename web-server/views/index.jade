@@ -17,7 +17,7 @@ block content
 				a.aq-tag.ui.blue.tag.label 初學者
 			div#screen-box.ui.grey.stacked.segment
 				video(width='100%', height='100%', autoplay, muted, loop)
-					source(src='http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm', type='video/webm')
+					source(src='https://upload.wikimedia.org/wikipedia/commons/transcoded/1/13/Neon_tetra_%28Paracheirodon_innesi%29_in_an_aquarium.webm/Neon_tetra_%28Paracheirodon_innesi%29_in_an_aquarium.webm.480p.webm', type='video/webm')
 			div.ui.two.column.grid
 				div.eleven.wide.column
 					div.ui.form
@@ -67,21 +67,21 @@ block content
 				| 下方有三條控制項提供調整光的三原色的各自比例，讓魚缸和水生植物能夠在最佳的光色下生活，也讓它隨著您的心情隨時變換色調。
 			div.ui.form
 				div.inline.field
-					div.ui.toggle.checkbox
+					div#lightCheck.ui.toggle.checkbox
 						input(type='checkbox')
 						label 開關
-				div.field
-					label R
+				div#lightSliderGroup.field.disabled
+					label 紅光
 					div.inline.fields
 						label.rgbLeft 0
 						input.red(type='range', min='0', max='255', step='5', value='125')
 						label.rgbRight 255
-					label G
+					label 綠光
 					div.inline.fields
 						label.rgbLeft 0
 						input.green(type='range', min='0', max='255', step='5', value='125')
 						label.rgbRight 255
-					label B
+					label 藍光
 					div.inline.fields
 						label.rgbLeft 0
 						input.blue(type='range', min='0', max='255', step='5', value='125')
@@ -89,9 +89,28 @@ block content
 					div.ui.basic.right.aligned.segment
 						button.ui.labeled.icon.black.button
 							i.idea.icon
-							| Submit
+							| 套用
 			h4.ui.horizontal.divider.header
 				i.bar.food.icon
 				| 飼料投遞
 			p
 				| 餵食馬達轉動的圈數以及轉動的角度都會影響餵食的飼料量，差別在於，如果您的飼料顆粒較大，可以藉由多次轉動造成的晃動讓飼料顆粒較容易落下！
+			div.ui.form
+				div.fields
+					div.field
+						label 角度
+						div.ui.right.labeled.input
+							input(type='text')
+							div.ui.basic.label
+								| 度
+					div.field
+						label 圈數
+						div.ui.right.labeled.input
+							input(type='text')
+							div.ui.basic.label
+								| 圈
+					div.field
+						div.ui.basic.right.aligned.segment
+							button.ui.labeled.icon.black.button
+								i.spoon.icon
+								| 餵食
