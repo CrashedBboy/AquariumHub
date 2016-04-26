@@ -39,6 +39,7 @@ var svr = net.createServer(function(sock){
 
             var sqlFindDevice = 'SELECT * FROM user_device WHERE device_id = ?';
             var sqlFindChannel = 'SELECT * FROM user_ichannel WHERE user_id = ?';
+            var sqlFindTopic = 'SELECT * FROM IoT_channels WHERE id = ?';
             var sqlUpdateChannel = 'UPDATE user_ichannel SET user_id = ? WHERE channel_id = ?';
             var sqlUpdateDevice = 'UPDATE user_device SET last_online = CURRENT_TIMESTAMP, online_status = TRUE WHERE user_id = ?';
             
@@ -55,17 +56,22 @@ var svr = net.createServer(function(sock){
                             throw err;
                         if(rows.length > 0){
                             var channel_id = rows[0].channel_id;
-                            //return to client
-                            sock.write('TOPIC ' + channel_id);
-                            //return to supernode
-                            var supernode = new net.Socket();
-                            supernode.connect(supernodePort, supernodeAddr, function(){
-                                supernode.write('NEW ' + user_id + ' ' + channel_id);
-                                supernode.destroy();
-                                console.log('SuperNode connect');
-                            });
-                            supernode.on('close', function(){
-                                console.log('Supernode connection close');    
+                            con.query(sqlFindTopic, channel_id, function(err, rows){
+                                if(err)
+                                    throw err;
+                                var channel_topic = rows[0].topic;
+                                //return to client
+                                sock.write('TOPIC ' + channel_topic);
+                                //return to supernode
+                                var supernode = new net.Socket();
+                                supernode.connect(supernodePort, supernodeAddr, function(){
+                                    supernode.write('NEW ' + user_id + ' ' + channel_id);
+                                    supernode.destroy();
+                                    console.log('SuperNode connect');
+                                });
+                                supernode.on('close', function(){
+                                    console.log('Supernode connection close');    
+                                });
                             });
                         }
                         else{
