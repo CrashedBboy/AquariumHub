@@ -1,9 +1,7 @@
-var ENV = require("./env.js");
-
-function User(id, topic, stream = null) {
+function User(id, topic) {
 	this.id = id;
 	this.topic = topic;
-	this.stream = stream;
+	this.stream = null;
 }
 
 module.exports = User;

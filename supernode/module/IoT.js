@@ -2,7 +2,7 @@ var mqtt = require('mqtt');
 var moduleName = "[IoT]";
 
 function IoT(brokerAddr) {
-	this.brokerAddr = brokerAddr;
+	this.brokerAddr = "mqtt://" + brokerAddr;
 	this.users = new Array();
 	this.connection = null;
 }
@@ -15,12 +15,6 @@ IoT.prototype.connect = function() {
 
 IoT.prototype.connectInit = function() {
 	console.log(moduleName + "MQTT broker("+ this.brokerAddr +") connected");
-
-	/* suscribe all active user's topics */
-	for (i = 0; i < this.users.length; i++) {
-		this.connection.subscribe(users[i].topic);
-		console.log(moduleName + "Subscribe user " + users[i].id + " topic: " + users[i].topic);
-	}
 }
 
 IoT.prototype.messageHandler = function(topic, message) {
@@ -30,6 +24,8 @@ IoT.prototype.messageHandler = function(topic, message) {
 
 IoT.prototype.addUser = function(user) {
 	this.users.push(user);
+	this.connection.subscribe(user.topic);
+	console.log(moduleName + "Subscribe user " + user.id + " topic: " + user.topic);
 }
 
 IoT.prototype.feed = function(userID, degree, times) {
