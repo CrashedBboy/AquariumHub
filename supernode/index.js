@@ -1,24 +1,16 @@
-var IoT = require('./IoT.js');
-var Database = require('./Database.js');
-var ENV = require('./env.json');
-var User = require('./User.js');
-var IPCServer = require('./IPCServer.js');
+var IPCServer = require("./module/IPCServer.js");
+var Database = require("./module/Database.js");
+var IoT = require("./module/IoT.js");
+var env = require("./env.json");
 
-var iot = new IoT(ENV.brokerAddr);
-var db = new Database(ENV.dbAddr, ENV.dbName, ENV.dbUser, ENV.dbPasswd);
-var ipcServer = new IPCServer(ENV.ipcAddr, ENV.ipcPort);
+var ipc = new IPCServer(env.IPC.addr, env.IPC.port);
+var db = new Database(env.Database.addr, env.Database.name, env.Database.user, env.Database.password);
+var iot = new IoT(env.IoT.brokerAddr);
 
-/* Start all connections */
-iot.connect();
 db.connect();
+iot.connect();
 
-ipcServer.setIoTConn(iot);
-ipcServer.setDBConn(db)
-ipcServer.start();
-
-/* Retrieving all active user and their topics */
-var originUser = db.getOnline();
-for (i = 0; i < originUser.length; i++){
-	var user = new User(originUser[i].name, originUser[i].topic);
-	iot.addUser(user);
-}
+ipc.init();
+ipc.setIoTConn(iot);
+ipc.setDBConn(db);
+ipc.start();
