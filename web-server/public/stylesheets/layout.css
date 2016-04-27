@@ -1,0 +1,10 @@
+#nav {
+	border-bottom: 2px solid grey;
+	height: 50px;
+	border-radius: 0;
+}
+
+#nav > a {
+	border-radius: 0;
+}
+

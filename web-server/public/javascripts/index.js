@@ -1,0 +1,9 @@
+$(document).ready(function(){
+	$('.ui.checkbox').checkbox();
+	$('#lightCheck').click(function(){
+		if($('#lightSliderGroup').hasClass('disabled'))
+			$('#lightSliderGroup').removeClass('disabled');
+		else
+			$('#lightSliderGroup').addClass('disabled');
+	});
+});

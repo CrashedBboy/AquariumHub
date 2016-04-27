@@ -1,0 +1,116 @@
+extends layout
+
+block stylesheet
+	link(rel='stylesheet', href='/stylesheets/index.css')
+
+block javascript
+	script(type='text/javascript', src='/javascripts/index.js')
+
+block content
+	div.ui.grid.divided.stackable.main
+		div#screen-grid.nine.wide.column
+			div#aquarium-title.ui.basic.segment
+				div.ui.huge.header 我的水族箱
+				i.tags.icon
+				a.aq-tag.ui.red.tag.label 水草
+				a.aq-tag.ui.teal.tag.label 斑馬魚
+				a.aq-tag.ui.blue.tag.label 初學者
+			div#screen-box.ui.grey.stacked.segment
+				video(width='100%', height='100%', autoplay, muted, loop)
+					source(src='https://upload.wikimedia.org/wikipedia/commons/transcoded/1/13/Neon_tetra_%28Paracheirodon_innesi%29_in_an_aquarium.webm/Neon_tetra_%28Paracheirodon_innesi%29_in_an_aquarium.webm.480p.webm', type='video/webm')
+			div.ui.two.column.grid
+				div.eleven.wide.column
+					div.ui.form
+						div.inline.field
+							div.ui.toggle.checkbox
+								input(type='checkbox', tabindex='0', class='hidden')
+								label 立即觀看我的魚缸
+				div.five.wide.column.right.aligned
+					a.ui.label.blue
+						| 觀看次數
+						div.detail 1294
+			div.ui.basic.segment 我也問過不少魚友包括我家裡的魚缸底櫃也有這種情況，其實這是底櫃傳導的共振聲音，原理跟鼓是一樣，這是由於底櫃的空間比較大，可板材相對比較薄而產生的共振傳導造成的，其實可以在魚缸的底部，墊上四個橡膠墊子，並且壓壓，搖晃一下只要不發“虛這”，這樣就會大大減少傳導的噪音降底魚缸底櫃而產生的共鳴噪聲。
+			div.ui.basic.segment
+				.ui.comments
+					h3.ui.dividing.header 回應
+					.comment
+						.content
+							a.author 過路客
+							.metadata
+								span.date Today at 5:42PM
+							.text
+								| 太潮啦!
+					.comment
+						.content
+							a.author 黑騎醫護
+							.metadata
+								span.date Yesterday at 12:30AM
+							.text
+								p 月牙天衝！！
+					form.ui.reply.form
+						.field
+							textarea
+						.ui.blue.labeled.submit.icon.button
+							i.icon.edit
+							|  Add Reply
+		div#console-grid.seven.wide.column
+			div#console-title.ui.basic.segment
+				h2.ui.header.huge
+					i.cloud.icon
+					div.content 遠端照護
+				p
+					| 在這裡，你可以透過簡易的控制面板調整您的魚缸的燈光開關、光色，也可以藉由設定餵魚馬達轉動的次數和角度，調整至您理想的餵食量，讓照護您的水族寵物不受任何距離的限制。
+			h4.ui.horizontal.divider.header
+				i.sun.icon
+				| 照明控制
+			p
+				| 下方有三條控制項提供調整光的三原色的各自比例，讓魚缸和水生植物能夠在最佳的光色下生活，也讓它隨著您的心情隨時變換色調。
+			div.ui.form
+				div.inline.field
+					div#lightCheck.ui.toggle.checkbox
+						input(type='checkbox')
+						label 開關
+				div#lightSliderGroup.field.disabled
+					label 紅光
+					div.inline.fields
+						label.rgbLeft 0
+						input.red(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					label 綠光
+					div.inline.fields
+						label.rgbLeft 0
+						input.green(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					label 藍光
+					div.inline.fields
+						label.rgbLeft 0
+						input.blue(type='range', min='0', max='255', step='5', value='125')
+						label.rgbRight 255
+					div.ui.basic.right.aligned.segment
+						button.ui.labeled.icon.black.button
+							i.idea.icon
+							| 套用
+			h4.ui.horizontal.divider.header
+				i.bar.food.icon
+				| 飼料投遞
+			p
+				| 餵食馬達轉動的圈數以及轉動的角度都會影響餵食的飼料量，差別在於，如果您的飼料顆粒較大，可以藉由多次轉動造成的晃動讓飼料顆粒較容易落下！
+			div.ui.form
+				div.fields
+					div.field
+						label 角度
+						div.ui.right.labeled.input
+							input(type='text')
+							div.ui.basic.label
+								| 度
+					div.field
+						label 圈數
+						div.ui.right.labeled.input
+							input(type='text')
+							div.ui.basic.label
+								| 圈
+					div.field
+						div.ui.basic.right.aligned.segment
+							button.ui.labeled.icon.black.button
+								i.spoon.icon
+								| 餵食
