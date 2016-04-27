@@ -28,6 +28,8 @@ $(document).ready(function() {
 	$('#stream-switch').click(function() {
 		if ($(this).hasClass("checked")) {
 			streamOn();
+		} else {
+			streamOff();
 		}
 	});
 });
@@ -36,12 +38,18 @@ function streamOn() {
 	streamOnXHR();
 }
 
+function streamOff() {
+	clearScreenBox();
+	appendPoster();
+}
+
 function streamOnXHR() {
 	$.ajax({
 		url: "/streamon",
 		type: "POST",
 		data: null,
 		success: function(data) {
+			console.log(data);
 			if (data != "BUSY") {
 				clearScreenBox();
 				appendStreamVideo(data);
@@ -83,10 +91,15 @@ function lightXHR(trigger, red, green, blue) {
 		btnLoading(trigger);
 	}
 	$.ajax({
-		url: "/streamon",
+		url: "/light",
 		type: "POST",
-		data: null,
+		data: {
+			red: red,
+			green: green,
+			blue: blue
+		},
 		success: function(data) {
+			console.log(data);
 			if (trigger == "light-btn") {
 				btnStopLoading(trigger);
 			}
@@ -107,6 +120,7 @@ function feedXHR(angle, times) {
 			times: times
 		},
 		success: function(data){
+			console.log(data);
 			btnStopLoading("#feed-btn");
 		},
 		error: function(xhr, status, err) {
