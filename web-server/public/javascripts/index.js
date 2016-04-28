@@ -22,6 +22,8 @@ $(document).ready(function() {
 	$("#feed-btn").click(function() {
 		var angle = $("#angle").val();
 		var times = $("#times").val();
+		$("#angle").val("");
+		$("#times").val("");
 		feedXHR(angle, times);
 	});
 
@@ -100,7 +102,7 @@ function lightXHR(trigger, red, green, blue) {
 		},
 		success: function(data) {
 			console.log(data);
-			if (trigger == "light-btn") {
+			if (trigger == "#light-btn") {
 				btnStopLoading(trigger);
 			}
 		},
@@ -134,5 +136,5 @@ function btnLoading(btn) {
 }
 
 function btnStopLoading(btn) {
-	$(btn).addClass("loading");
+	$(btn).removeClass("loading");
 }
