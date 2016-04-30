@@ -2,8 +2,8 @@ var net = require('net');
 var mysql = require('mysql');
 
 var sockets = [];
-var severAddr = '140.115.152.224';
-var severPort = 8080;
+var severAddr = '';
+var severPort = ;
 var supernodeAddr = '';
 var supernodePort = ;
 
@@ -26,7 +26,7 @@ var svr = net.createServer(function(sock){
         if(action == 'ASKTOPIC'){
             //connection
             var con = mysql.createConnection({
-                host     : '140.115.189.142',
+                host     : '',
                 user     : '',
                 password : '',
                 database : ''
@@ -82,18 +82,23 @@ var svr = net.createServer(function(sock){
                                 console.log('Channel is empty or not');
                                 if(rows.length > 0){
                                     var channel_id = rows[0].channel_id;
-                                    //return to client
-                                    sock.write('TOPIC ' + channel_id);
-                                    //return to supernode
-                                    var supernode = new net.Socket();
-                                    supernode.connect(supernodePort, supernodeAddr, function(){
-                                        supernode.write('NEW ' + user_id + ' ' + channel_id);
-                                        supernode.destroy();
-                                        console.log('SuperNode connect');
-                                    });
-                                    supernode.on('close', function(){
-                                        console.log('Supernode connection close');    
-                                    });
+																		con.query(sqlFindTopic, channel_id, function(err, rows){
+																			if(err)
+																				throw err;
+																			var channel_topic = row[0].topic;
+																			//return to client
+																			sock.write('TOPIC ' + channel_id);
+																			//return to supernode
+																			var supernode = new net.Socket();
+																			supernode.connect(supernodePort, supernodeAddr, function(){
+																					supernode.write('NEW ' + user_id + ' ' + channel_id);
+																					supernode.destroy();
+																					console.log('SuperNode connect');
+																			});
+																			supernode.on('close', function(){
+																					console.log('Supernode connection close');    
+																			});
+																		});
                                     //update the user id of the channel
                                     con.query(sqlUpdateChannel, [user_id, channel_id], function(err, rows){
                                         if(err)
