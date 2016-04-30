@@ -1,0 +1,14 @@
+{
+    "name": "iot-server",
+    "version": "0.0.1",
+    "description": "This is the IoT-Server to let client transfer data into MySQL or query data from MySQL to client.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Pin-Man Huang",
+    "license": "ISC",
+    "dependencies": {
+        "mysql": "2.10.2"  
+    }
+}
