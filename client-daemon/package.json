@@ -9,6 +9,7 @@
   "author": "Linman",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "mraa": "~1.0.0"
+    "mraa": "~1.0.0",
+    "mqtt": "~1.10.0"
   }
 }
