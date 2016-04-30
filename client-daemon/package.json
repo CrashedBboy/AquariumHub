@@ -1,0 +1,15 @@
+{
+  "name": "client-daemon",
+  "version": "0.0.0",
+  "description": "client-daemon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Linman",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "mraa": "~1.0.0",
+    "mqtt": "~1.10.0"
+  }
+}
